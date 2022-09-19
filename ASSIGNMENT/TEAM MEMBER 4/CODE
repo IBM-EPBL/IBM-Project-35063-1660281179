@@ -1,0 +1,51 @@
+#define echoPin 8
+#define trigPin 9
+
+long duration;
+int distance;
+
+void setup()
+{
+  pinMode(10,OUTPUT);
+ 
+ 
+  pinMode(echoPin,INPUT);
+  pinMode(trigPin,OUTPUT);
+  pinMode(10,OUTPUT);
+  pinMode(11,OUTPUT);
+  pinMode(12,OUTPUT);
+ 
+  }
+
+void loop()
+{
+  digitalWrite(trigPin, 0);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, 1);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, 0);
+  duration = pulseIn(echoPin, 1);
+  distance = duration * 0.034 / 2; 
+  int signal=analogRead(A3);
+  float voltage=(signal*5.0)/1024;
+  float temC=(voltage-0.5)*100;
+  
+  if (temC>35){
+  digitalWrite(12,1);
+  digitalWrite(10,1);
+  }
+  else{
+  digitalWrite(12,0);
+  digitalWrite(10,0);
+  digitalWrite(11,1);
+  }
+   if (distance>150){
+  digitalWrite(12,1);
+  digitalWrite(10,1);
+  }
+  else{
+  digitalWrite(12,0);
+  digitalWrite(10,0);
+  digitalWrite(11,1);
+  }
+}
