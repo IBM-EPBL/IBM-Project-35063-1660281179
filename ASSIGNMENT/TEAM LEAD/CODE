@@ -1,0 +1,48 @@
+#include <LiquidCrystal.h>
+#include <Servo.h>
+Servo s;
+int t=8;
+int e=9;
+const int rs=12,en=11,d4=5,d5=4,d6=3,d7=2;
+LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
+void setup()
+{
+  lcd.begin(16,2);
+  lcd.print("temperature");
+  s.attach(6);
+  pinMode(t,OUTPUT);
+  pinMode(e,INPUT);
+  Serial.begin(9600);
+}  
+void loop()
+{
+  double a=analogRead(A0);
+  double aC=map(a,20,358,-40.0,125.0);
+  lcd.setCursor(0,1);
+  lcd.print(aC);
+  delay(500);
+  if(aC>50)
+    for (int i=0;i<20000;i=i+10)
+   tone(10,i);
+  else
+   noTone(10);
+  digitalWrite(13,0);
+  int b=digitalRead(7);
+  if(b){
+    digitalWrite(13,1);
+    delay(100);
+  }
+  digitalWrite(t,0);
+  digitalWrite(t,1);
+  delay(10);
+  digitalWrite(t,0);
+  float D=pulseIn(e,2);
+  float d=(D*0.0343/2);
+  Serial.println(d);
+  delay(500);
+  if (d<=100)
+     s.write(180);
+  else
+    s.write(0);
+  
+}
