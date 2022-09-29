@@ -1,1 +1,14 @@
-
+import random
+temp=(random.randint(25,60))
+hum=(random.randint(30,60))
+print(temp)
+print(hum)
+if temp>45:
+      if hum<45:
+        print("hazard predicted")
+      else:
+        print("hazard free")
+elif temp==45:
+    print("tem high")
+else:
+    print("normal")
