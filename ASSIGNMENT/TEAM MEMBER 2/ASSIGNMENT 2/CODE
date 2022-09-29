@@ -1,0 +1,13 @@
+import random
+temperature= random.randint(20,90)
+humidity= random.randint(30,50)
+for i in range(30,70):
+    if(temperature>50)&(humidity<50):
+        print(temperature)
+        print(humidity)
+        print("alaram is on")
+    else:
+        print(temperature)
+        print(humidity)
+        print("alaram is off")
+        
