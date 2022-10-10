@@ -1,0 +1,24 @@
+#led blink  and traffic light system 
+#import the required libraries 
+From  gpiozero import Button, trafficlights, buzzer 
+From time import sleep 
+
+#buzzer for alarm 
+Buzzer =buzzer (15)
+Button =button (21)
+#pin configuration for traffic lights(red,green,amber)
+Lights =trafficlights (25,8,7)
+
+#iterate the loop statements
+While  true :
+                    Button.wait_for_press()
+                    Buzzer. on()
+                    Lights .green. on()
+                    Sleep (1)
+                    Lights. Amber. on()
+                    Sleep (1)
+                    Lights. Red. on()
+                    Sleep (1)
+                    Lights.off()
+                    Buzzer.off()
+#end of the program
