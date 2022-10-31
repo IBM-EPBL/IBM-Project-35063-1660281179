@@ -1,0 +1,48 @@
+#define ECHO_PIN 2
+#define TRIG_PIN 3
+#define LED_BUILTIN 13
+#define organization = "57kmpx"
+#define deviceType = "abcd"
+#define deviceId = "13"
+#define authMethod = "token"
+#define authToken = "123456789"
+
+void setup(){
+    Serial.begin(9600);
+    pinMode(TRIG_PIN,OUTPUT);
+    pinMode(ECHO_PIN,INPUT);
+    pinMode(LED_BUILTIN, OUTPUT);
+}
+ 
+ float readDistanceCM(){
+     digitalWrite(TRIG_PIN,LOW);
+     delayMicroseconds(2);
+     digitalWrite(TRIG_PIN,HIGH);
+     delayMicroseconds(10);
+     digitalWrite(TRIG_PIN,LOW);
+     int duration=pulseIn(ECHO_PIN,HIGH);
+     return duration*0.034/2;
+ }
+ void loop(){
+     float distance=readDistanceCM();
+     {
+     digitalWrite(LED_BUILTIN, HIGH);
+     delay(1000);
+     digitalWrite(LED_BUILTIN, LOW);
+     delay(1000);
+     }
+
+     if(distance>=100)
+     {
+         Serial.println("person detected");
+         Serial.print("Measured distance:");
+         Serial.println(readDistanceCM());
+         Serial.println("HIGH");
+     }
+     else{
+         Serial.print("Measured distance:");
+         Serial.println(readDistanceCM());
+         Serial.println("LOW");
+     }
+     delay(1000);
+}
