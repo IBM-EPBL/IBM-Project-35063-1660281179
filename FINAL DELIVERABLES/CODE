@@ -1,1 +1,66 @@
-
+import time
+import sys
+import ibmiotf.application
+import ibmiotf.device
+import random
+from geopy.geocoders import Nominatim
+# initialize Nominatim API
+geolocator = Nominatim(user_agent="geoapiExercises")
+#Provide your IBM Watson Device Credentials
+organization = "pb6xw8"
+deviceType = "efgh"
+deviceId = "1234"
+authMethod = "token"
+authToken = "12345678"
+try:
+         deviceOptions = {"org": organization, "type": deviceType, "id": deviceId, "auth-method": authMethod, "auth-token": authToken}
+         deviceCli = ibmiotf.device.Client(deviceOptions)
+         #..............................................
+except Exception as e:
+         print("Caught exception connecting device: %s" % str(e))
+         sys.exit()
+# Connect and send a datapoint "hello" with value "world" into the cloud as an event of type "greeting" 10 times
+print("checking connection to waston iot...")
+deviceCli.connect()
+time.sleep(1) 
+while True:
+        name='bin'
+        level=random.randint(1,100)
+        weight=random.randint(1,100)
+        latitude=random.uniform(12.867342,13.043514)
+        longitude=random.uniform(77.477635,77.695109)
+        Latitude=str(latitude)
+        Longitude=str(longitude)
+        location = geolocator.reverse(Latitude+","+Longitude)
+        address = location.raw['address']
+        city = address.get('city', '')
+        print('City : ', str(city))
+        #STATUS OF GARBAGE CAN
+        if(level<30):
+                level_status="low level"
+                print("level_status=low level garbage")
+        elif(level>30)and(level<80):
+                level_status="medium level garbage"
+                print("level_status=low level garbage")   
+        else:
+                level_status="high level garbage"
+                print("level_status=high level garbage")
+        if (weight<30):
+                weight_status="low level"
+                print("weight_status=low level garbage")
+        elif(weight>30)and(weight<80):
+                weight_status="medium level garbage"
+                print("weight_status=low level garbage")    
+        else:
+                weight_status="high level garbage"
+                print("weight_status=high level garbage")   
+        data = { 'name' : name,'level' : level,'level_status':level_status,'weight': weight,'weight_status':weight_status, 'lat': Latitude,'lon':Longitude,'city':str(city)}
+        #print data
+        def myOnPublishCallback():
+            print ("Published weight = %s kg" % weight,"level=%s m" %level, "latitude = %s %%" % latitude, "longitude = %s %%" % longitude,"city=%s" %city,"to IBM Watson")
+        success = deviceCli.publishEvent("project", "json", data, qos=0, on_publish=myOnPublishCallback)
+        if not success:
+            print("Not connection lost from sensor to ibm iot")
+        time.sleep(10)
+# Disconnect the device and application from the cloud
+deviceCli.disconnect()
